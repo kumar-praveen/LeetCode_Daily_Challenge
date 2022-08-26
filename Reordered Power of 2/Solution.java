@@ -21,7 +21,7 @@ class Solution {
         if(n==0) return false;
         
         long val=1;
-        HashSet<String> allPower = new HashSet();
+        HashSet<String> allPower = new HashSet<String>();
         while(val*2<=1e9){
             val*=2;
             allPower.add(String.valueOf(val));
