@@ -4,7 +4,7 @@
 import java.util.*;
 class Solution {
     public boolean isPossible(int[] nums) {
-        int n=nums.length;
+        // int n=nums.length;
         HashMap<Integer,Integer> count = new HashMap<Integer,Integer>();
         HashMap<Integer,Integer> required = new HashMap<Integer,Integer>();
         
