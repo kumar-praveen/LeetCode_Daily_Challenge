@@ -1,65 +1,48 @@
 // Question : https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/
 
+import java.util.*;;
 
 class Solution {
-    public void preprocessMatrix(int [][] mat){
-        int row=mat.length,col=mat[0].length;
-        for(int j=1;j<col;j++){
-            mat[0][j]+=mat[0][j-1];
-        }
-        for(int i=1;i<row;i++){
-            mat[i][0]+=mat[i-1][0];
-        }
+    private int findMaxLessThanK(int arr[],int n,int k){
+        int ans=Integer.MIN_VALUE,csum=0;
         
-        for(int i=1;i<row;i++){
-            for(int j=1;j<col;j++){
-                mat[i][j]+=mat[i-1][j]+mat[i][j-1]-mat[i-1][j-1];
+        TreeSet<Integer> sumValues = new TreeSet<Integer>();
+        sumValues.add(0);
+        
+        for(int i=0;i<n;i++){
+            csum+=arr[i];
+            if(sumValues.ceiling(csum-k)!=null){
+                int req = sumValues.ceiling(csum-k);
+                if(sumValues.contains(req)){
+                    ans=Math.max(ans,csum-req);
+                }
+            }
+            sumValues.add(csum);
+        }
+        return ans;
+    }
+    public int maxSumSubmatrix(int[][] matrix, int k) {
+        int row=matrix.length,col=matrix[0].length;
+        
+        for(int j=0;j<col;j++){
+            for(int i=1;i<row;i++){
+                matrix[i][j]+=matrix[i-1][j];
             }
         }
-        return;
-    }
-    
-    public int maxSumSubmatrix(int[][] mat, int mini) {
-        int row=mat.length,col=mat[0].length;
-        preprocessMatrix(mat);
         
         int ans=Integer.MIN_VALUE;
-        for(int i=0;i<row;i++){
-            for(int j=0;j<col;j++){
-                for(int k=0;k<col;k++){
-                    int sum=mat[i][k];
-                    if(j>1) sum-=mat[i][j-1];
-                    if(sum<=mini){
-                        ans=Math.max(ans,sum);
-                    }
+        for(int r1=0;r1<row;r1++){
+            for(int r2=r1;r2<row;r2++){
+                int arr[]=new int[col];
+                for(int c=0;c<col;c++){
+                    arr[c]=matrix[r2][c];
+                    if(r1>0) arr[c]-=matrix[r1-1][c];
                 }
+                int temp = findMaxLessThanK(arr,col,k);
+                ans=Math.max(ans,temp);
             }
         }
         
         return ans;
-    }
-    public static void main(String[] args) {
-        Solution solution = new Solution();
-        int row=5,col=8;
-        int mat[][]=new int[row][col];
-        System.out.print("[");
-        for(int i=0;i<row;i++){
-            System.out.print("[");
-            for(int j=0;j<col;j++){
-                int val=Math.toIntExact(Math.round(Math.random()*50));
-                mat[i][j]=val;
-                if(j!=col-1)
-                    System.out.print(val+",");
-                else
-                    System.out.print(val);
-            }
-            if(i==row-1)
-                System.out.print("]");
-            else
-                System.out.print("],");
-        }
-        System.out.println("]");
-
-        System.out.println("Answer is "+solution.maxSumSubmatrix(mat, 8));
     }
 }
