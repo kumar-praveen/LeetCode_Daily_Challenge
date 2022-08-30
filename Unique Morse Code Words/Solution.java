@@ -1,5 +1,3 @@
-package Unique_Morse_Code_Words;
-
 import java.util.*;
 
 public class Solution {
